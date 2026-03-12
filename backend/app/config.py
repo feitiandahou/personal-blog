@@ -1,3 +1,4 @@
+from pydantic import Field
 from pydantic_settings import BaseSettings
 
 
@@ -18,6 +19,17 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads"
     MAX_UPLOAD_SIZE: int = 5 * 1024 * 1024  # 5MB
 
+    # Public site / CORS
+    SITE_URL: str = "http://localhost:5173"
+    FRONTEND_ORIGINS: str = Field(
+        default=(
+            "http://localhost:5173,"
+            "http://127.0.0.1:5173,"
+            "http://localhost:8000,"
+            "http://127.0.0.1:8000"
+        )
+    )
+
     @property
     def DATABASE_URL(self) -> str:
         return (
@@ -25,6 +37,10 @@ class Settings(BaseSettings):
             f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
             "?charset=utf8mb4"
         )
+
+    @property
+    def CORS_ORIGINS(self) -> list[str]:
+        return [origin.strip() for origin in self.FRONTEND_ORIGINS.split(",") if origin.strip()]
 
     class Config:
         env_file = ".env"

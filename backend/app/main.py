@@ -22,22 +22,18 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+os.makedirs(app_settings.UPLOAD_DIR, exist_ok=True)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:8000",
-        "http://127.0.0.1:8000",
-    ],
+    allow_origins=app_settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Static files for uploads
-if os.path.isdir(app_settings.UPLOAD_DIR):
-    app.mount("/uploads", StaticFiles(directory=app_settings.UPLOAD_DIR), name="uploads")
+app.mount("/uploads", StaticFiles(directory=app_settings.UPLOAD_DIR), name="uploads")
 
 # Register routers
 app.include_router(auth.router)

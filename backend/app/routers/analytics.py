@@ -209,6 +209,8 @@ async def backup(user: User = Depends(get_current_user), db: AsyncSession = Depe
 
 @router.get("/rss", response_class=Response)
 async def rss_feed(db: AsyncSession = Depends(get_db)):
+    site_url = settings.SITE_URL.rstrip("/")
+
     # Get site settings
     settings_result = await db.execute(select(Setting))
     site_settings = {s.key: s.value for s in settings_result.scalars().all()}
@@ -216,7 +218,7 @@ async def rss_feed(db: AsyncSession = Depends(get_db)):
     fg = FeedGenerator()
     fg.title(site_settings.get("site_title", "Blog"))
     fg.description(site_settings.get("site_subtitle", ""))
-    fg.link(href="http://localhost:5173")
+    fg.link(href=site_url)
     fg.language("en")
 
     stmt = (
@@ -230,7 +232,7 @@ async def rss_feed(db: AsyncSession = Depends(get_db)):
         fe = fg.add_entry()
         fe.id(str(post.id))
         fe.title(post.title)
-        fe.link(href=f"http://localhost:5173/post/{post.slug}")
+        fe.link(href=f"{site_url}/post/{post.slug}")
         fe.description(post.excerpt or "")
         if post.published_at:
             fe.pubDate(post.published_at.strftime("%a, %d %b %Y %H:%M:%S +0000"))
