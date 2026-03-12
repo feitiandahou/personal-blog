@@ -1,0 +1,129 @@
+@import '../styles/variables.less';
+
+.public-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: @header-height;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background @transition-base, box-shadow @transition-base;
+
+  &-inner {
+    width: 100%;
+    max-width: @max-width;
+    padding: 0 @space-lg;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &-logo {
+    display: flex;
+    align-items: center;
+    gap: @space-sm;
+    font-size: @font-size-xl;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    cursor: pointer;
+    transition: transform @transition-fast;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+
+  &-nav {
+    display: flex;
+    align-items: center;
+    gap: @space-xs;
+
+    @media (max-width: @bp-sm) {
+      display: none;
+    }
+  }
+
+  &-link {
+    padding: 8px 16px;
+    border-radius: @radius-full;
+    font-size: @font-size-sm;
+    font-weight: 500;
+    transition: background @transition-fast, color @transition-fast;
+
+    &:hover {
+      background: rgba(99, 102, 241, 0.08);
+      color: @accent-primary;
+    }
+
+    &.active {
+      background: @accent-gradient;
+      color: white;
+    }
+  }
+
+  &-actions {
+    display: flex;
+    align-items: center;
+    gap: @space-sm;
+  }
+}
+
+[data-mantine-color-scheme='light'] .public-header {
+  background: rgba(248, 249, 252, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+
+  &.scrolled {
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.06);
+  }
+}
+
+[data-mantine-color-scheme='dark'] .public-header {
+  background: rgba(10, 14, 26, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+  &.scrolled {
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.public-footer {
+  padding: @space-3xl @space-lg;
+  text-align: center;
+
+  &-inner {
+    max-width: @max-width;
+    margin: 0 auto;
+  }
+
+  &-divider {
+    height: 1px;
+    background: @accent-gradient;
+    opacity: 0.15;
+    margin-bottom: @space-xl;
+  }
+
+  &-text {
+    font-size: @font-size-sm;
+  }
+
+  &-links {
+    display: flex;
+    justify-content: center;
+    gap: @space-lg;
+    margin-top: @space-md;
+
+    a {
+      font-size: @font-size-sm;
+      transition: color @transition-fast;
+
+      &:hover {
+        color: @accent-primary;
+      }
+    }
+  }
+}
